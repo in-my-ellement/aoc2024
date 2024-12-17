@@ -4,6 +4,7 @@ import itertools as it
 # input parsing
 input = open("inputs/10", "r")
 data = list(map(list, filter(len, input.read().split("\n"))))
+input.close()
 
 G = nx.DiGraph()
 for i in range(0, len(data)):
@@ -28,8 +29,8 @@ for i in range(0, len(data)):
 # part 1
 sources = [node for node in G.nodes if G.nodes.data()[node]["height"] == 0]
 targets = [node for node in G.nodes if G.nodes.data()[node]["height"] == 9]
-print(len(list(filter(lambda p: nx.has_path(G, p[0], p[1]), it.product(sources, targets)))))
+print(len([pair for pair in it.product(sources, targets) if nx.has_path(G, pair[0], pair[1])]))
 
 # part 2
-paths = list(map(lambda node: list(nx.all_simple_paths(G, node, targets)), sources))
-print(sum(list(map(len, paths))))
+paths = [list(nx.all_simple_paths(G, node, targets)) for node in sources]
+print(sum([len(path) for path in paths]))
